@@ -32,252 +32,60 @@ export default class App extends Component<Props> {
     
     constructor(props) {
         super(props);
+//        this.state = { data: [] };
         this.state = {
-          markers: [{
-            coordinates: {
-              latitude: 42.33,
-              longitude:-71.08
-            }
-          },
-          { 
-            
-            coordinates: {
-              latitude: 42.16,
-              longitude: -71.21
-            }  
-          },
-        { 
-            coordinates: {
-              latitude: 42.49,
-              longitude:-71.39
-            }  
-          },
-                            { 
-            coordinates: {
-              latitude: 47.49,
-              longitude: -121.83
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude: 42.37,
-              longitude: -73.21
-            }  
-          },
-                            { 
-            coordinates: {
-              latitude: 43.94,
-              longitude: -71.82
-            }  
-          },
-                            { 
-            coordinates: {
-              latitude: 42.98,
-              longitude: -71.13
-            }  
-          },
-                            { 
-            coordinates: {
-              latitude: 40.96,
-              longitude: -74.07
-            }  
-          },
-                            { 
-            coordinates: {
-              latitude: 40.74,
-              longitude: -74.08
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude:40.77,
-              longitude: -73.97
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude: 41.16,
-              longitude: -73.76
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude: 40.74,
-              longitude: -73.59
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude: 43.11,
-              longitude: -73.87
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude: 41.15,
-              longitude: -74.03
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude:40.88,
-              longitude: -72.8
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude: 41.89,
-              longitude:-74.26
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude: 43.04,
-              longitude: -73.09
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude: 39.14,
-              longitude: -77.2
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude: 39.55,
-              longitude: -76.31
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude: 39.55,
-              longitude: -76.31
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude:41.65,
-              longitude: -75.3
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude:39.92,
-              longitude: 39.92
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude:40.21,
-              longitude: -75.37
-            }  
-          },
-                    { 
-            coordinates: {
-              latitude:41.87,
-              longitude: -71.58
-            }  
-          },
-                    
-                    
-        ]
+          markers: [[
+              {"Cases": 1, "City": "", "CityCode": "", "Country": "United States of America", "CountryCode": "US", "Date": "2020-01-22T00:00:00Z", "Lat": "37.09", "Lon": "-95.71", "Province": "", "Status": "confirmed"}
+
+          ]]
         }
+                    
+
 
     }
     
-    
-
-    _getData = () => {
-        fetch('https://api.covid19api.com/dayone/country/united-states/status/confirmed/live')
-        .then(response => response.json())
-        .then(data => {
-            json = data;
-            console.log(json[0])
-
-//            console.log("hello");
-
-//            this.setState({ data: data.data[0]['Lat'] })
-//            console.log(data.data)
-        })   
-        .catch(error => console.log('Error'))
-    }
-    
+      componentDidMount() {
+        fetch(`https://api.covid19api.com/dayone/country/united-states/status/confirmed/live`)
+          .then(res => res.json())
+          .then(json => {
+            var dict = []
+            for (i = 0; i < 1000; i++) {
+                dict.push(json[i])
+            } 
+            
+            this.setState({ markers: [dict]
+         });     
+        } );
+      }
     render() { 
-        //boston is 42.358812, -71.061334  
-        return (
+        return (    
         <MapView 
             style = {{flex: 1}} 
-            region={{latitude: 42.358812,
-                    longitude: -71.061334, 
-                    latitudeDelta: 10, 
-                    longitudeDelta: 10}} 
+            region={{latitude: 37.09,
+                    longitude: -95.71, 
+                    latitudeDelta: 50, 
+                    longitudeDelta: 1}} 
             showsUserLocation={true} 
         > 
             
-        {this.state.markers.map(marker => (
+    
+        {
+           this.state.markers[0].map(marker => (
             <MapView.Marker 
-            coordinate={marker.coordinates}
-            />
-        ))}
+            coordinate={{latitude: marker.Lat, 
+                    longitude: marker.Lon}}
+            description={String(marker.Cases)+" Cases sinces " + String(marker.Date) + " in " + String(marker.City) + ", " + String(marker.Province)}
+            >
+        
+            </MapView.Marker>
+        ))
+        }
         </MapView>
-        
-        
         );
         
     }
+    
 }
-//        <MapView.Marker
-//            coordinate={{latitude: 42.358812,
-//            longitude:-71.061334}}
-//         />
-
-//const App: () => React$Node = () => {
-//  return (
-//    <>
-//      <StatusBar barStyle="dark-content" />
-//      <SafeAreaView>
-//        <ScrollView
-//          contentInsetAdjustmentBehavior="automatic"
-//          style={styles.scrollView}>
-//          <Header />
-//          {global.HermesInternal == null ? null : (
-//            <View style={styles.engine}>
-//              <Text style={styles.footer}>Engine: Hermes</Text>
-//            </View>
-//          )}
-//          <View style={styles.body}>
-//            <View style={styles.sectionContainer}>
-//              <Text style={styles.sectionTitle}>Step One</Text>
-//              <Text style={styles.sectionDescription}>
-//                Edit <Text style={styles.highlight}>App.js</Text> to change this
-//                screen and then come back to see your edits.
-//              </Text>
-//            </View>
-//            <View style={styles.sectionContainer}>
-//              <Text style={styles.sectionTitle}>See Your Changes</Text>
-//              <Text style={styles.sectionDescription}>
-//                <ReloadInstructions />
-//              </Text>
-//            </View>
-//            <View style={styles.sectionContainer}>
-//              <Text style={styles.sectionTitle}>Debug</Text>
-//              <Text style={styles.sectionDescription}>
-//                <DebugInstructions />
-//              </Text>
-//            </View>
-//            <View style={styles.sectionContainer}>
-//              <Text style={styles.sectionTitle}>Learn More</Text>
-//              <Text style={styles.sectionDescription}>
-//                Read the docs to discover what to do next:
-//              </Text>
-//            </View>
-//            <LearnMoreLinks />
-//          </View>
-//        </ScrollView>
-//      </SafeAreaView>
-//    </>
-//  );
-//};
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -318,4 +126,38 @@ const styles = StyleSheet.create({
   },
 });
 
+
+// getData(){
+//        var dict = [];
+//        return fetch('https://api.covid19api.com/dayone/country/united-states/status/confirmed/live')
+//        .then(response => response.json())
+//        .then(data => {
+//            json = data;
+//            myObj = [{"name":"John", "age":30, "car":null},
+//                    {"name":"mark", "age":31, "car":null}];
+////            console.log(json[0]["Lat"]);
+//            
+//            for (entry in myObj ){
+////                console.log(myObj[entry]["name"]);
+//                var name = myObj[entry]["name"];
+//                var age = myObj[entry]["age"]
+//                dict.push({
+//                    key: name,
+//                    age: age
+//                });
+//            }
+////            console.log(dict[0])
+//            console.log("-----")
+//
+//            return dict[1]
+//
+//        })   
+//        .catch(error => console.log('Error'));
+////        console.log("-----")
+//
+////        console.log(dict[0])
+//
+////        return 1;
+//
+//    }
 //export default App;
